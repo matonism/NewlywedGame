@@ -12,6 +12,7 @@ import {
   StyleSheet,
   ScrollView,
   TextInput,
+  Button,
   View,
   Text,
   StatusBar,
@@ -22,7 +23,14 @@ import {
 import { Banner } from './components/Banner';
 
 class App extends React.Component {
+    
+    onPressLearnMore(){
+
+    }
+
+
   render(){
+
     return (
       <View style={styles.background}>
         <StatusBar/>
@@ -36,6 +44,13 @@ class App extends React.Component {
                 <Text style={styles.questionText}>What is your partners biggest pet peeve?</Text>
                 
                 <TextInput style={styles.textInput} placeholder='Answer...' />
+                <Button
+                  onPress={this.onPressLearnMore}
+                  title="Submit"
+                  color="#092327"
+                  style={styles.button}
+                  accessibilityLabel="Submit your answer"
+                />
               </View>
               
 
@@ -46,6 +61,8 @@ class App extends React.Component {
       </View>
     );
   }
+
+
 };
 
 
@@ -90,6 +107,10 @@ const styles = StyleSheet.create({
     borderColor: 'gray', 
     borderWidth: 1,
     backgroundColor: 'white'
+  },
+  button: {
+    width: 120,
+    margin: 20
   }
 
 });
