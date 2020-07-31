@@ -13,7 +13,6 @@ import {Text, StyleSheet, View} from 'react-native';
 import React from 'react';
 
 class Banner extends React.Component {
-
     render(){
         return (
             <View style={styles.bannerContainer}>
