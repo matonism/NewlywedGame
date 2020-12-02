@@ -42,13 +42,24 @@ class QuestionBuilder {
         let questions = await StorageManager.read('questions');
         let indexString = await StorageManager.read('questionIndex');
         let index = parseInt(indexString);
-        let nextQuestion = questions[index + 1];
-        StorageManager.store('questionIndex', JSON.stringify(index+1));
+
+        let nextQuestion = null;
+        if(questions.length > index){
+            nextQuestion = questions[index + 1];
+            StorageManager.store('questionIndex', JSON.stringify(index+1));
+        }
         return nextQuestion;
     }
 
     static loadPreviousQuestion(){
 
+    }
+
+    
+    static async getAllQuestions(){
+        console.log('getting all question');
+        let questions = await StorageManager.read('questions');
+        return questions;
     }
 
 }
