@@ -30,6 +30,7 @@ class QuestionBuilder {
     }
 
     static async getCurrentQuestion(){
+        console.log('getting current question');
         let questions = await StorageManager.read('questions');
         let indexString = await StorageManager.read('questionIndex');
         let index = parseInt(indexString);
@@ -37,14 +38,12 @@ class QuestionBuilder {
         return currentQuestion;
     }
 
-    static getNextQuestion(){
-        let questions = StorageManager.read('questions');
-        let index = StorageManager.read('questionIndex');
-
+    static async getNextQuestion(){
+        let questions = await StorageManager.read('questions');
+        let indexString = await StorageManager.read('questionIndex');
+        let index = parseInt(indexString);
         let nextQuestion = questions[index + 1];
-
         StorageManager.store('questionIndex', JSON.stringify(index+1));
-
         return nextQuestion;
     }
 

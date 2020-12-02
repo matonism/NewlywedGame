@@ -25,7 +25,8 @@ class App extends React.Component {
   }
 
   componentDidMount(){
-    console.log('component moundets');
+    console.log('component mounted');
+    this.getNextQuestion = this.getNextQuestion.bind(this);
     QuestionBuilder.initializeQuestions(10);
     QuestionBuilder.getCurrentQuestion().then((currentQuestion) => {
       this.setState({
@@ -38,10 +39,21 @@ class App extends React.Component {
 
   }
 
+  getNextQuestion(){
+    console.log('getting next question');
+    QuestionBuilder.getNextQuestion().then((nextQuestion) => {
+      this.setState({
+        currentQuestion: nextQuestion
+      });
+      console.log('updated question:')
+    });
+
+  }
+
   render(){
 
     return (
-      <QuestionScreen questionText={this.state.currentQuestion}></QuestionScreen>
+      <QuestionScreen questionText={this.state.currentQuestion} getNextQuestion={this.getNextQuestion}></QuestionScreen>
     );
   }
 
