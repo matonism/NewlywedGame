@@ -10,165 +10,142 @@
 
 'use strict';
 import {
-    SafeAreaView,
-    StyleSheet,
-    ScrollView,
-    TextInput,
-    View,
-    Text,
-    StatusBar,
-    TouchableWithoutFeedback,
-    ActivityIndicator
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  View,
+  Text,
+  StatusBar,
+  TouchableWithoutFeedback,
+  ActivityIndicator
 } from 'react-native';
-import {Picker} from '@react-native-community/picker'
+import { Picker } from '@react-native-community/picker'
 import React from 'react';
 // import { Picker } from '@react-native-community/picker';
 
 import { Banner } from '../../components/Banner';
 import CustomButton from '../../components/CustomButton/CustomButton';
+import SmallButton from '../../components/SmallButton/SmallButton';
 
 class HomeScreen extends React.Component {
 
-    numberOfQuestions = 3;
+  constructor(props) {
+    super(props);
 
-    constructor(props){
-        super(props);
-        console.log(this.props);
-        this.state = {
-            isLoading: true,
-            answerLocked: false
-        }
-        this.setSelectedValue = this.setSelectedValue.bind(this);
-        this.initializeGame = this.initializeGame.bind(this);
+    this.state = {
+      numberOfQuestions: 10,
+      isLoading: true,
+      answerLocked: false
     }
 
-    componentDidMount(){
-      console.log('mounting HomeScreen');
-    }
+    this.setSelectedValue = this.setSelectedValue.bind(this);
+    this.initializeGame = this.initializeGame.bind(this);
+  }
 
-    // setSelectedValue(value){
-    //   this.numberOfQuestions = value;
-    // }
-    
-    initializeGame(){
-      console.log('in startGame method');
-      console.log(this.props);
-      this.props.startGame(this.numberOfQuestions);
-      console.log('after props');
-    }
-
-    getNumberOfQuestionOptions(){
-      let maxNumberOfQuestions = 20;
-
-      let options = [];
-      for(let i = 0; i < maxNumberOfQuestions; i++){
-        let stringValue = i.toString();
-        options.push(<Picker.Item key={stringValue} label={stringValue} value={i}></Picker.Item>);
-      }
-
-      let picker = (
-        <Picker class="questionText" prompt="Select number of questions" 
-          selectedValue={this.numberOfQuestions}
-          //onValueChange={(itemValue, itemIndex) => this.setSelectedValue(itemValue)}
-          >
-            {options}
-        </Picker>
-      )
-
-      return picker;
-    }
-
-    setSelectedValue(itemValue){
-
-    }
+  componentDidMount() {}
 
 
-    render(){
+  getNumberOfQuestionOptions() {
+    let maxNumberOfQuestions = 20;
 
-      let picker = this.getNumberOfQuestionOptions();
-
-      return (
-
-        
-        <View style={styles.background}>
-  
-        <StatusBar/>
-        <SafeAreaView style={styles.backgroundTwo} >
-          {/* <ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}> */}              
-              <Banner></Banner>
-              {picker}
-              <CustomButton title='Start Game' onPress={this.initializeGame}></CustomButton>
-          {/* </ScrollView> */}
-        </SafeAreaView>
-      
-      </View>
+    let options = [];
+    for (let i = 1; i <= maxNumberOfQuestions; i++) {
+      let stringValue = i.toString();
+      options.push(
+        <Picker.Item key={stringValue} label={stringValue} value={i}></Picker.Item>
       );
-        
-
     }
 
+    let picker = (
+      <View style={styles.pickerContainer}>
+        <Picker style={styles.picker}
+          prompt="Select number of questions" 
+          dropdownIconColor="#F0agFF"
+          selectedValue={this.state.numberOfQuestions} 
+          onValueChange={(itemValue, itemIndex) => this.setSelectedValue(itemValue)}
+        >
+          {options}
+        </Picker>
+      </View>
+    )
+
+    return picker;
+  }
+
+  setSelectedValue(value) {
+    this.setState({'numberOfQuestions': value});
+  }
+
+  initializeGame() {
+    this.props.startGame(this.state.numberOfQuestions);
+  }
+
+
+  render() {
+
+    let picker = this.getNumberOfQuestionOptions();
+
+    return (
+      <View style={styles.background}>
+        <StatusBar />
+        <SafeAreaView style={styles.safeArea} >
+          <View style={styles.mainFormat}>
+            <Banner></Banner>
+            <View style={styles.homeContent}>
+              
+              <Text style={styles.promptText}>Select a number of questions</Text>
+              <View style={styles.inlineControls}>
+                {picker}
+                <SmallButton title='Go' onPress={this.initializeGame}></SmallButton>
+              </View>
+            </View>
+          </View>
+        </SafeAreaView>
+      </View>
+    );
+  }
 }
 
 
 
 const styles = StyleSheet.create({
-    background: {
-      backgroundColor: 'purple',
-      flex: 1
-    },
-    backgroundTwo: {
-      backgroundColor: 'tan',
-      flex: 1
-    },
-    content: {
-      backgroundColor: "#00A9A5",
-      flex: 6,
-      justifyContent: 'center'
-    },
-    scrollView: {
-      backgroundColor: "blue",
-      flex: 1
-    },
-    engine: {
-      position: 'absolute',
-      right: 0,
-    },
-    body: {
-      flex: 1,
-      backgroundColor: 'orange'
-    },
-    questionText: {
-      textAlign: 'center',
-      marginTop: -80,
-      padding: 20,
-      fontSize: 30,
-      color: 'white'
-    },
-    answerText: {
-      textAlign: 'center',
-      marginTop: -80,
-      padding: 20,
-      fontSize: 30,
-      color: 'white'
-    },
-    textInput: { 
-      marginLeft: 20,
-      marginRight: 20,
-      marginBottom: 10,
-      padding: 10,
-      height: 50, 
-      borderColor: 'gray', 
-      borderWidth: 1,
-      backgroundColor: 'white',
-      borderRadius: 10
-    },
-    button: {
-      width: 120,
-      margin: 20,
-      marginTop: 10
-    }
-  
-  });
-  
+  background: {
+    backgroundColor: 'purple',
+    flex: 1
+  },
+  safeArea: {
+    backgroundColor: 'tan',
+    flex: 1
+  },
+  mainFormat: {
+    flex: 1,
+    backgroundColor: '#00A9A5'
+  },
+  homeContent: {
+    backgroundColor: "#00A9A5",
+    flex: 1,
+    justifyContent: 'center',
+    marginHorizontal: 20
+  },
+  promptText: {
+    fontSize: 25,
+    textAlign: "left",
+    color: "white",
+    opacity: 0.9
+  },
+  inlineControls: {
+    marginVertical: 10,
+    backgroundColor: "#00A9A5",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  pickerContainer: {
+    backgroundColor: "white",
+    flex: 1
+  }
+
+});
+
 
 export default HomeScreen;

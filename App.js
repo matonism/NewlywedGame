@@ -11,69 +11,41 @@ import {
   StyleSheet
 } from 'react-native';
 import HomeScreen from './components/HomeScreen/HomeScreen';
+import EndScreen from './components/EndScreen/EndScreen';
 
 
 import QuestionScreen from './components/QuestionScreen/QuestionScreen';
-import QuestionBuilder from './components/service-components/QuestionBuilder';
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      currentQuestion: 'abcd',
       PAGE_HOME_SCREEN: true,
       PAGE_GAME_SCREEN: false,
       PAGE_END_SCREEN: false
 
     }
     this.startGame = this.startGame.bind(this);
-  }
-
-  componentDidMount(){
-    console.log('component mounted');
-
-    this.getNextQuestion = this.getNextQuestion.bind(this);
     this.endGame = this.endGame.bind(this);
-
+    this.returnToHome = this.returnToHome.bind(this);
   }
+
+  componentDidMount(){}
 
   startGame(numberOfQuestions){
-
-    QuestionBuilder.initializeQuestions(numberOfQuestions);
-    QuestionBuilder.getCurrentQuestion().then((currentQuestion) => {
-
-      this.setState({
-        currentQuestion: currentQuestion
-      });
-      console.log('state in mounted component');
-      console.log(this.state);
-
-    });
-
-    this.setState({'PAGE_HOME_SCREEN': false});
-    this.setState({'PAGE_GAME_SCREEN': true});
+    this.setState({'numberOfQuestions': numberOfQuestions});
+    this.setState({'PAGE_GAME_SCREEN': true, 'PAGE_HOME_SCREEN': false});
   }
 
   endGame(){
-
+    this.setState({'PAGE_END_SCREEN': true, 'PAGE_GAME_SCREEN': false});
   }
 
-  getNextQuestion(){
-    console.log('getting next question');
-    QuestionBuilder.getNextQuestion().then((nextQuestion) => {
-      if(nextQuestion == null){
-        //End the game
-        console.log('the game is over');
-      }else{
-        this.setState({
-          currentQuestion: nextQuestion
-        });
-        console.log('updated question:')
-      }
-    });
-
+  returnToHome(){
+    this.setState({'PAGE_HOME_SCREEN': true, 'PAGE_END_SCREEN': false});
   }
+
 
   render(){
 
@@ -83,10 +55,12 @@ class App extends React.Component {
       );
     }else if(this.state.PAGE_GAME_SCREEN){
       return (
-        <QuestionScreen questionText={this.state.currentQuestion} getNextQuestion={this.getNextQuestion} endGame={this.endGame}></QuestionScreen>
+        <QuestionScreen numberOfQuestions={this.state.numberOfQuestions} endGame={this.endGame}></QuestionScreen>
       );
     }else if(this.state.PAGE_END_SCREEN){
-
+      return (
+        <EndScreen returnToHome={this.returnToHome}></EndScreen>
+      );
     }else{
       console.log('There was an error.  State in App.js is not correct');
       //Show an error screen
